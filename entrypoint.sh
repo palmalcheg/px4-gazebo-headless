@@ -22,7 +22,7 @@ OPTIND=1 # Reset in case getopts has been used previously in the shell.
 
 vehicle=iris
 world=empty
-sim_arg=''
+asset=""
 
 while getopts "h?v:w:s:" opt; do
     case "$opt" in
@@ -34,7 +34,7 @@ while getopts "h?v:w:s:" opt; do
         ;;
     w)  world=$OPTARG
         ;;
-    s)  sim_arg=$OPTARG
+    a)  asset=$OPTARG
         ;;
     esac
 done
@@ -52,7 +52,12 @@ do
     fi
 done
 
-sim_arg=gazebo_${vehicle}__${world}
+if [ -z "$asset" ];
+   sitl=""
+   asset=gazebo_${vehicle}__${world}
+elif
+   sitl="_default"
+fi
 
 if [ "$#" -eq 1 ]; then
     IP_QGC="$1"
@@ -69,4 +74,4 @@ ${SITL_RTSP_PROXY}/build/sitl_rtsp_proxy &
 
 source ${WORKSPACE_DIR}/edit_rcS.bash ${IP_API} ${IP_QGC} &&
 cd ${FIRMWARE_DIR} &&
-HEADLESS=1 make px4_sitl ${sim_arg}
+HEADLESS=1 make px4_sitl${sitl} ${asset}
