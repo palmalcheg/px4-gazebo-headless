@@ -2,7 +2,7 @@
 
 function show_help {
     echo ""
-    echo "Usage: ${0} [-h | -v VEHICLE | -w WORLD] [IP_API | IP_QGC IP_API]"
+    echo "Usage: ${0} [-h | -v VEHICLE | -w WORLD  | -a ASSET ] [IP_API | IP_QGC IP_API]"
     echo ""
     echo "Run a headless px4-gazebo simulation in a docker container. The"
     echo "available vehicles and worlds are the ones available in PX4"
@@ -24,7 +24,7 @@ vehicle=iris
 world=empty
 asset=""
 
-while getopts "h?v:w:s:" opt; do
+while getopts "h?v:w:a:" opt; do
     case "$opt" in
     h|\?)
         show_help
@@ -52,7 +52,7 @@ do
     fi
 done
 
-if [ -z "$asset" ];
+if [ -z "$asset" ]; then
    sitl=""
    asset=gazebo_${vehicle}__${world}
 elif
